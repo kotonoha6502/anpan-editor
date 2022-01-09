@@ -1,0 +1,32 @@
+{
+  "name": "anpan-editor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app/main.js",
+  "scripts": {
+    "watch": "spago build && concurrently \"spago build -w\" \"env NODE_ENV=development node esbuild.js\"",
+    "start": "env NODE_ENV=development electron .",
+    "build:compile": "spago build --purs-args=\"--codegen corefn\"",
+    "build:dce": "zephyr -f Main.main",
+    "build:bundle": "env NODE_ENV=production node esbuild.js",
+    "build": "npm run build:compile && npm run build:dce && npm run build:bundle",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^7.0.0",
+    "electron": "^16.0.6",
+    "esbuild": "^0.14.11",
+    "esbuild-plugin-purescript": "^1.1.1",
+    "esbuild-sass-plugin": "^2.0.3",
+    "purescript": "^0.14.5",
+    "sass": "^1.47.0",
+    "spago": "^0.20.3",
+    "zephyr": "https://github.com/jonasbuntinx/zephyr.git"
+  },
+  "dependencies": {
+    "bulma": "^0.9.3"
+  }
+}
