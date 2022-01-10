@@ -52,6 +52,28 @@ const menuTemplate = Menu.buildFromTemplate([
       { type: 'separator' },
       isMac ? {role:'close', label:'ウィンドウを閉じる'} : {role:'quit', label:'終了'}
     ]
+  },
+  {
+    label: 'ヘルプ',
+    role: "help",
+    submenu: [
+      {
+        label: 'バージョン情報',
+        click() {
+          const versionWindow = new BrowserWindow({
+            parent: win,
+            modal: true,
+            width: 320,
+            height: 156,
+            resizable: false,
+            minimizable: false,
+            icon: path.resolve(__dirname, "assets/images/info-icon.png"),
+          })
+          versionWindow.setMenuBarVisibility(false)
+          versionWindow.loadFile("app/html/version.html")
+        }
+      }
+    ]
   }
 ]);
 
@@ -69,14 +91,15 @@ const createWindow = () => {
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
-    }
+    },
+    icon: path.join(__dirname, "assets/app-icon.png")
   })
 
   if (process.env.NODE_ENV === "development") {
     win.webContents.openDevTools()
   }
 
-  win.loadFile('app/index.html')
+  win.loadFile('app/html/index.html')
 }
 
 app.whenReady().then(() => {

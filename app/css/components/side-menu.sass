@@ -1,11 +1,21 @@
+
 .side-menu
   height: 100vh
   background-color: #eaeaea
+  &-item
+    &-container
+      width: 100%
+      &.is-active
+        border-left: 2px solid #5e5e5e
+        border-right: 2px solid #eaeaea
+    &__mask
+      background-color: #ffffff
+      opacity: 0.5
+      top: 8px
+      pointer-events: none
+
   &-btn
-    height: 32px
-    width: 32px
     margin: 8px 0 8px
-    position: relative
     cursor: pointer
     
     &__title

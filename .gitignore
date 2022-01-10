@@ -11,3 +11,4 @@
 /.spago
 /app/lib/bundle.css
 /app/lib/bundle.js
+/**/.DS_Store

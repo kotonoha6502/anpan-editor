@@ -14,7 +14,6 @@ import Halogen.Hooks as Hooks
 import Halogen.Store.Monad (class MonadStore, updateStore)
 import Halogen.Store.UseSelector (useSelector)
 
-
 sideMenu :: forall q i o m
           . MonadStore S.Action S.Store m
          => H.Component q i o m
@@ -22,14 +21,43 @@ sideMenu = Hooks.component \_ _ -> Hooks.do
   ctx <- useSelector S.selectCurrentView
 
   Hooks.pure do
-    let currentTab = fromMaybe TitleEditor ctx
+    let currentTab = fromMaybe TitleEditor ctx    
     HH.div [HP.class_ $ ClassName "side-menu is-flex is-flex-direction-column is-align-items-center"]
-      [ HH.div
-          [ HP.class_ $ ClassName $ "side-menu-btn side-menu-btn__title " <> (if currentTab == TitleEditor then "is-active" else "")
-          , HE.onClick \_ -> updateStore (S.UpdateView TitleEditor)
+      [ sideMenuItem TitleEditor (currentTab == TitleEditor)
+      , sideMenuItem MachigaiSagashiEditor (currentTab == MachigaiSagashiEditor)
+      ]
+
+sideMenuItem :: forall m
+             .  MonadStore S.Action S.Store m
+             => Route
+             -> Boolean
+             -> H.ComponentHTML (Hooks.HookM m Unit) () m
+sideMenuItem tab active =
+  let
+    btnClass = case tab of
+      TitleEditor -> "title"
+      MachigaiSagashiEditor -> "machigai-sagashi"
+
+    containerClass = "side-menu-item-container is-position-relative is-flex is-justify-content-center "
+      <> (if active then "is-active" else "")
+
+    innerClass = "side-menu-btn is-square-32 "
+      <> "side-menu-btn__" <> btnClass <> " "
+      <> (if active then "is-active " else "")
+
+    maskClass = "side-menu-item__mask is-position-absolute is-square-32 "
+      <> (if active then "is-transparent " else "")
+
+  in 
+
+    HH.div [ HP.class_ $ ClassName containerClass ]
+      [ HH.div [ HP.class_ $ ClassName "side-menu-item" ]
+        [ HH.div
+          [ HP.class_ $ ClassName innerClass
+          , HE.onClick \_ -> updateStore (S.UpdateView tab)
           ] []
+        ]
       , HH.div
-          [ HP.class_ $ ClassName $ "side-menu-btn side-menu-btn__machigai-sagashi " <> (if currentTab == MachigaiSagashiEditor then "is-active" else "")
-          , HE.onClick \_ -> updateStore (S.UpdateView MachigaiSagashiEditor)
-          ] []
+        [ HP.class_ $ ClassName maskClass
+        ] []
       ]
