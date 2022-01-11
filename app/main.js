@@ -6,15 +6,81 @@ const isMac = process.platform === 'darwin';
 const appName = "あんぱんえでぃた〜";
 
 let win;
+let versionWindow;
+//=================================================================================================
+//  メインウィンドウ生成
+//=================================================================================================
+const createWindow = () => {
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload-main.js')
+    },
+    icon: path.join(__dirname, "assets/app-icon.png")
+  })
+
+  if (process.env.NODE_ENV === "development") {
+    win.webContents.openDevTools()
+  }
+
+  win.loadFile('app/html/index.html')
+}
+
+app.whenReady().then(() => {
+  createWindow()
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  })
+})
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit()
+})
+
+//=================================================================================================
+//  IPC通信
+//=================================================================================================
+ipcMain.handle('nyan', (evt, data) => {
+  return `${data}にゃん`
+})
+
+ipcMain.handle('dispose-version-window', () => {
+  versionWindow?.destroy()
+})
 
 //=================================================================================================
 //  メニュー
 //=================================================================================================
+const showVersionWindow = () => {
+  if (versionWindow) {
+    return
+  }
+
+  versionWindow = new BrowserWindow({
+    parent: win,
+    modal: true,
+    width: 320,
+    height: 192,
+    resizable: false,
+    minimizable: false,
+    webPreferences: {
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload-version.js')
+    },
+    icon: path.resolve(__dirname, "assets/images/info-icon.png"),
+  })
+  versionWindow.setMenuBarVisibility(false);
+  versionWindow.loadFile("app/html/version.html");
+}
+
 const menuTemplate = Menu.buildFromTemplate([
   ...(isMac ? [{
     label: appName,
     submenu: [
-      {role: 'about', label: `${appName}について`},
+      {label: `${appName}について`, click: showVersionWindow },
       {type: 'separator'},
       {role: 'services', label: 'サービス'},
       {type: 'separator'},
@@ -53,70 +119,16 @@ const menuTemplate = Menu.buildFromTemplate([
       isMac ? {role:'close', label:'ウィンドウを閉じる'} : {role:'quit', label:'終了'}
     ]
   },
-  {
+  ...(isMac ? [] : [{
     label: 'ヘルプ',
     role: "help",
     submenu: [
       {
         label: 'バージョン情報',
-        click() {
-          const versionWindow = new BrowserWindow({
-            parent: win,
-            modal: true,
-            width: 320,
-            height: 156,
-            resizable: false,
-            minimizable: false,
-            icon: path.resolve(__dirname, "assets/images/info-icon.png"),
-          })
-          versionWindow.setMenuBarVisibility(false)
-          versionWindow.loadFile("app/html/version.html")
-        }
+        click: showVersionWindow
       }
     ]
-  }
+  }])
 ]);
 
-// メニューを適用する
 Menu.setApplicationMenu(menuTemplate);
-
-//=================================================================================================
-//  メインウィンドウ生成
-//=================================================================================================
-const createWindow = () => {
-  win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js')
-    },
-    icon: path.join(__dirname, "assets/app-icon.png")
-  })
-
-  if (process.env.NODE_ENV === "development") {
-    win.webContents.openDevTools()
-  }
-
-  win.loadFile('app/html/index.html')
-}
-
-app.whenReady().then(() => {
-  createWindow()
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
-})
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit()
-})
-
-//=================================================================================================
-//  IPC通信
-//=================================================================================================
-ipcMain.handle('nyan', (evt, data) => {
-  return `${data}にゃん`
-})

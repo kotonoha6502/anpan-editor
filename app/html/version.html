@@ -2,8 +2,15 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';" >
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
     <title>About あんぱんえでぃた〜</title>
+    <link href="./../lib/bundle.css" rel="stylesheet">
     <style>
+      .version-container {
+        display: flex;
+        flex-direction: column;
+      }
       .version-info {
         font-size: 12px;
         align-items: start;
@@ -17,17 +24,41 @@
         font-size: 12px;
         margin: 0 24px 0;
       }
+      .version-footer {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        margin-top: 12px;
+        margin-bottom: 24px;
+      }
+      button {
+        margin-right: 48px;
+      }
     </style>
   </head>
   <body>
-    <div class="version-info">
-      <div style="margin: 16px;">
-        <img src="../assets/app-icon.png" width="64px" height="64px" />
+    <div class="version-container">
+      <div class="version-info">
+        <div style="margin: 24px 24px 0;">
+          <img src="../assets/app-icon.png" width="64px" height="64px" />
+        </div>
+        <div class="is-align-right" style="margin: 24px 24px 0 0;">
+          あんぱんえでぃた～ ver. <span id="app-version"></span><br />
+          (c) Team.U-1 <br />
+        </div>
       </div>
-      <div class="is-align-right" style="margin: 16px 16px 16px 0;">
-        あんぱんえでぃた～ ver. <span id="version-text">0.1.0</span><br />
-        (c) Team.U-1 <br />
-      </div>
+      <div class="version-footer">
+        <button class="button" onclick="handleOK()">
+          OK
+        </button>
+      </div>  
     </div>
   </body>
+
+  <script>
+    function handleOK (){
+      console.log("OK clicked.");
+      window.versionAPI.dispose();
+    }
+  </script>
 </html>
