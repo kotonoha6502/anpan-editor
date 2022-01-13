@@ -106,12 +106,9 @@ const menuTemplate = Menu.buildFromTemplate([
           })
           .then(async (fileObj) => {
             if (!fileObj.canceled) {
-              const buf = await fs.readFile(fileObj.filePaths[0])
-              
+              console.log(fileObj.filePaths[0])
+              win.webContents.send('rom-file-selected', fileObj.filePaths[0])
             }
-          })
-          .catch((err) => {
-            console.error(err)
           })
         }
       },

@@ -2,11 +2,9 @@ module AnpanEditor.Renderer.Monad where
 
 import Prelude
 
-import AnpanEditor.Capability.Nyan (class Nyan)
-import AnpanEditor.Electron.ExposedAPI as Electron
 import AnpanEditor.Renderer.Store (Action, Store, reducer)
 import Effect.Aff (Aff)
-import Effect.Aff.Class (class MonadAff, liftAff)
+import Effect.Aff.Class (class MonadAff)
 import Effect.Class (class MonadEffect)
 import Halogen as H
 import Halogen.Store.Monad (class MonadStore, StoreT, runStoreT)
@@ -25,6 +23,3 @@ derive newtype instance Monad AppM
 derive newtype instance MonadEffect AppM
 derive newtype instance MonadAff AppM
 derive newtype instance MonadStore Action Store AppM
-
-instance Nyan AppM where
-  nyan = liftAff <<< Electron.nyan 

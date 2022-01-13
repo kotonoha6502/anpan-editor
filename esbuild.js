@@ -6,6 +6,7 @@ const path = require('path');
 const isDev = process.env.NODE_ENV === "development";
 
 esbuild.build({
+  platform: "node",
   entryPoints: ["app/renderer.js"],
   bundle: true,
   minify: !isDev,
@@ -14,6 +15,8 @@ esbuild.build({
   loader: {
     ".png": "base64",
   },
+  external: ["electron"],
+  format: 'cjs',
   plugins: [
     PureScriptPlugin({
       output: path.resolve(__dirname, isDev ? "output" : "dce-output"),
