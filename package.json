@@ -1,7 +1,7 @@
 {
   "name": "anpan-editor",
   "version": "1.0.0",
-  "description": "",
+  "description": "Soreike! Anpanman NES Hacking tool",
   "main": "app/main.js",
   "scripts": {
     "watch": "spago build && concurrently \"spago build -w\" \"env NODE_ENV=development node esbuild.js\"",
