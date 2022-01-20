@@ -3,6 +3,7 @@ module AnpanEditor.Data.NES.VirtualROM
   , RomArea(..)
   , RomMetaInfo
   , VROM
+  , getCurrentBase
   , patch
   , revert
   , runVROM
@@ -12,11 +13,11 @@ module AnpanEditor.Data.NES.VirtualROM
 
 import Prelude hiding ((+))
 
-import AnpanEditor.Data.NES.ROM (RomSpec, ROM)
 import Data.List (List(..))
 import Effect (Effect)
 import Effect.Ref (Ref)
 import Effect.Ref as Ref
+import NES.Data.ROM (RomSpec, ROM)
 import Node.Buffer (Buffer, Octet)
 import Node.Path (FilePath)
 
@@ -47,6 +48,9 @@ newtype VROM = VROM
     , undone :: List Change
     }
   }
+
+getCurrentBase :: VROM -> ROM
+getCurrentBase (VROM vrom) = vrom.base
 
 foreign import unsafeShowBuf :: Buffer -> String
 

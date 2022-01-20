@@ -15,7 +15,10 @@ to generate this file without the comments in this block.
   [ "aff"
   , "aff-promise"
   , "argonaut-core"
+  , "arraybuffer"
+  , "arraybuffer-builder"
   , "arraybuffer-types"
+  , "canvas-action"
   , "codec-argonaut"
   , "console"
   , "effect"
@@ -32,10 +35,12 @@ to generate this file without the comments in this block.
   , "node-path"
   , "prelude"
   , "psci-support"
+  , "record"
   , "refs"
   , "safe-coerce"
   , "strings"
   , "tuples"
+  , "uint"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]

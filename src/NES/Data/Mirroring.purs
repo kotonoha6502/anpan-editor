@@ -1,4 +1,4 @@
-module AnpanEditor.Data.NES.Mirroring
+module NES.Data.Mirroring
   ( Mirroring(..)
   , display
   , mirroringCodec

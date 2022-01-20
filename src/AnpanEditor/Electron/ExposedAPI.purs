@@ -6,7 +6,7 @@ module AnpanEditor.Electron.ExposedAPI
 
 import Prelude
 
-import AnpanEditor.Data.NES.ROM (ROM, romSpecCodec)
+import NES.Data.ROM (ROM, romSpecCodec)
 import AnpanEditor.Data.NES.VirtualROM (RomMetaInfo, VROM, vrom)
 import Control.Promise (Promise, toAffE)
 import Data.Argonaut.Core (Json)

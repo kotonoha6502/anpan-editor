@@ -5,7 +5,8 @@ const {
 const fs = require('fs/promises');
 const { resolve } = require('path');
 const path = require('path');
-const { decodeHeader } = require('./lib/nesrom')
+const { decodeHeader } = require('./lib/nesrom');
+const { bufferToByteArray } = require('./lib/hex');
 
 contextBridge.exposeInMainWorld('electron', {
   vrom: null,
@@ -40,7 +41,6 @@ contextBridge.exposeInMainWorld('electron', {
         directory: path.dirname(filePath),  
       },
       base: {
-        header: header,
         prg: prgRom,
         char: chrRom,
         ...(romSpec.hasTrainer ? { trainer } : {})

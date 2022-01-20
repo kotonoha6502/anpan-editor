@@ -11,6 +11,8 @@ import AnpanEditor.Electron.ExposedAPI as Electron
 import AnpanEditor.Renderer.Components.SideMenu (sideMenu)
 import AnpanEditor.Renderer.Route (Route(..))
 import AnpanEditor.Renderer.Store as S
+import AnpanEditor.Renderer.Views.MachigaiSagashiView (machigaiSagashiView)
+import AnpanEditor.Renderer.Views.TitleEditorView (titleEditorView)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Effect (Effect)
 import Effect.Aff (launchAff_)
@@ -69,11 +71,13 @@ app = Hooks.component \_ _ -> Hooks.do
           [ renderRouterView currentTab ]
         ]
       ]
+
   where
+  
     renderRouterView :: Route -> _
     renderRouterView = case _ of
-      TitleEditor -> HH.text "たいとるえでぃた〜"
-      MachigaiSagashiEditor -> HH.text "まちがいさがしえでぃた〜"
+      TitleEditor -> HH.slot_ (Proxy :: Proxy "titleEditorView") unit titleEditorView {}
+      MachigaiSagashiEditor -> HH.slot_ (Proxy :: Proxy "machigaiSagashiView") unit machigaiSagashiView {}
 
     handleAction :: Maybe Context -> Action -> Hooks.HookM m Unit
     handleAction _ = case _ of
